@@ -24,6 +24,11 @@
 .DS_Store
 *.pem
 
+# cloudflare
+/.wrangler/
+.dev.vars
+*.dev.vars
+
 # debug
 npm-debug.log*
 yarn-debug.log*

@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kvarta",
+  "compatibility_date": "2025-01-01",
+  "pages_build_output_dir": "out",
+  "d1_databases": [
+    {
+      "binding": "kvarta_db",
+      "database_name": "kvarta-db",
+      "database_id": "be2e0cf9-bdb3-4f93-9308-d09163d95b24"
+    }
+  ]
+}
