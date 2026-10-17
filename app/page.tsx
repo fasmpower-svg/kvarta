@@ -9,6 +9,7 @@ const products = [
     note: "цветочный, бергамот · светлая обжарка",
     price: "32 BYN",
     order: "Эфиопия Иргачеффе, 250 г",
+    h: 875,
   },
   {
     img: "/img/p-colombia.jpg",
@@ -17,6 +18,7 @@ const products = [
     note: "карамель, красное яблоко",
     price: "29 BYN",
     order: "Колумбия Уила, 250 г",
+    h: 467,
   },
   {
     img: "/img/p-brazil.jpg",
@@ -25,6 +27,7 @@ const products = [
     note: "орех, шоколад · под эспрессо",
     price: "26 BYN",
     order: "Бразилия Серрадо, 250 г",
+    h: 409,
   },
   {
     img: "/img/p-drip.jpg",
@@ -33,12 +36,14 @@ const products = [
     note: "ассорти · 10 штук",
     price: "18 BYN",
     order: "Дрип-пакеты, ассорти (10 шт)",
+    h: 1050,
   },
 ];
 
 export default function Home() {
   return (
     <>
+      <link rel="preload" as="image" href="/img/hero.jpg" fetchPriority="high" />
       <header className="site">
         <div className="wrap top">
           <div className="word">Кварта</div>
@@ -51,6 +56,7 @@ export default function Home() {
         </div>
       </header>
 
+      <main>
       <div className="wrap">
         <div className="hero">
           <div>
@@ -73,6 +79,7 @@ export default function Home() {
             alt="Обжарка зерна в барабане"
             width={1200}
             height={800}
+            fetchPriority="high"
           />
         </div>
 
@@ -95,7 +102,7 @@ export default function Home() {
       <section id="about" className="alt">
         <div className="wrap about">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/who.jpg" alt="Аня и Дмитрий в мастерской" width={1000} height={667} />
+          <img src="/img/who.jpg" alt="Аня и Дмитрий в мастерской" width={1000} height={666} loading="lazy" />
           <div>
             <h2>Аня и Дмитрий, обжариваем с 2019</h2>
             <p>
@@ -124,7 +131,14 @@ export default function Home() {
             {products.map((p) => (
               <div className="p" key={p.name}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="thumbImg" src={p.img} alt={p.alt} width={700} height={150} />
+                <img
+                  className="thumbImg"
+                  src={p.img}
+                  alt={p.alt}
+                  width={700}
+                  height={p.h}
+                  loading="lazy"
+                />
                 <h3>{p.name}</h3>
                 <div className="note">{p.note}</div>
                 <div className="row">
@@ -212,6 +226,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </main>
 
       <footer className="site">
         <div className="wrap top" style={{ height: "auto" }}>
