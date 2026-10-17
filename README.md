@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Кварта — лендинг обжарки кофе
 
-## Getting Started
+- **Сайт:** https://kvarta.fasmpower.workers.dev
+- **Отчёт Lighthouse (mobile):** [`reports/lighthouse-mobile.report.html`](reports/lighthouse-mobile.report.html)
 
-First, run the development server:
+## Стек и почему
+
+- **Next.js 16 (App Router) + Tailwind v4**, статический экспорт (`output: "export"`). Ставка на Next как основной стек команды.
+- **Хостинг — Cloudflare Workers** (статика + один воркер). В панели Cloudflare был доступен только Workers, поэтому вместо Pages — Workers со статическими ассетами: тот же бесплатный тариф, форма работает по тому же адресу.
+- Один воркер (`src/worker.ts`) отдаёт статику через `env.ASSETS` и принимает `POST /api/lead`.
+
+## Где хранятся заявки и почему
+
+**Cloudflare D1** (managed SQLite на бесплатном плане). Выбор: раз хостинг уже на Cloudflare, D1 не требует отдельного сервиса, бесплатной квоты с запасом, а SQLite достаточен для потока заявок. Схема — [`db/schema.sql`](db/schema.sql).
+
+## Запуск
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev            # локальная разработка
+npm run build          # статический экспорт в ./out
+npm run preview        # wrangler dev (воркер + ассеты + D1 локально)
+npm run db:local       # применить схему в локальный D1
+npm run db:remote      # применить схему в удалённый D1
+npm run deploy         # wrangler deploy
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Форма и источник рекламы
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Клиентская (`app/components/LeadForm.tsx`) + серверная (воркер) валидация белорусского номера: 9 цифр, код оператора 25/29/33/44. Повторный номер в течение 10 минут не создаёт вторую заявку — сервер смотрит последнюю запись по номеру, плюс кнопка блокируется при отправке (защита от двойного клика). При ошибке сети/сервера человек видит понятное сообщение. В момент отправки собираются `utm_*`, `yclid/gclid/fbclid`, `referrer`, `page_url`, `user-agent` — чтобы менеджер видел источник. Кнопки «заказать →» и «Оформить подписку» синхронизированы с выбором «Что интересует» и комментарием, чтобы в заявке не оставалось противоречий.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Telegram (бонус)
 
-## Learn More
+Заявка дублируется в бота, если заданы секреты (без них молча выключено):
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npx wrangler secret put TELEGRAM_BOT_TOKEN
+npx wrangler secret put TELEGRAM_CHAT_ID
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Lighthouse (mobile)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Performance **85**, Accessibility **100**, Best Practices **100**, SEO **100** (LCP ~3.9 c, TBT ~180 мс, CLS 0). Фото скачаны локально (`public/img`), шрифты self-hosted через `next/font`, hero-картинка с `preload` + `fetchPriority=high`.
 
-## Deploy on Vercel
+## Процесс работы с ИИ
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Что решал я (человек):** структуру и дизайн (остановился на тёмном варианте D после сравнения A/B/C), шрифтовую пару (PT Serif + Golos Text), подбор фото, тексты и тон, поведение кнопок заказа, правки по контрасту и высоте формы.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Что делал ИИ:** каркас Next-проекта, вёрстку секций, логику формы и воркера, D1-схему, дедуп, сбор `utm`, деплой-конфиг и отладку. Работали по шагам, с ревью каждой правки — поэтому коммитов много и они логические.
+
+**Где ИИ ошибался и как я это заметил:**
+- `create-next-app` падал с `EALLOWSCRIPTS` из-за `allow-scripts` в глобальном `.npmrc` — добавлен `allowScripts` в `package.json`.
+- В тёмной теме кружок радиокнопки вставал выше текста: конфликт специфичности (`form.lead label` перебивал `.radios label` и возвращал `display:block`). Заметил на глаз, поправил селектор.
+- Тест API через `curl` с inline-JSON ломался из-за экранирования кавычек в PowerShell — перешли на `--data-binary @file`.
+- Lighthouse сперва ругался на контраст подсказок (`#7d6b57` → 3.54:1) и отсутствие `<main>` — исправлено до 100 по доступности.
+
+**Что не успел / сделал бы иначе:** оставил бы реальный `og:image` 1200×630 вместо фотографии героя; подключил бы `next/image` (сейчас статический экспорт — обычные `<img>`); добавил бы rate-limit по IP и honeypot от ботов. Часть UI-деталей (ссылки в футере, больше анимаций) сознательно не раздувал ради скорости.
+
+## Допущения
+
+Телефон `+375 (29) 000-00-00` и Instagram `@kvarta.coffee` — заглушки, в ТЗ их нет. Фото — Pexels (бесплатная лицензия). Логотип — текстом.
