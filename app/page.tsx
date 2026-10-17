@@ -229,11 +229,17 @@ export default function Home() {
       </main>
 
       <footer className="site">
-        <div className="wrap top" style={{ height: "auto" }}>
-          <div className="word" style={{ fontSize: "16px" }}>
-            Кварта
+        <div className="wrap">
+          <div className="top" style={{ height: "auto" }}>
+            <div className="word" style={{ fontSize: "16px" }}>
+              Кварта
+            </div>
+            <div>Минск · с 2019 · обжариваем по четвергам</div>
           </div>
-          <div>Минск · с 2019 · обжариваем по четвергам</div>
+          <p className="disclaimer">
+            Демо-сайт сделан в рамках тестового задания. Компания «Кварта», адрес,
+            телефон и Instagram — вымышленные, форма работает для демонстрации.
+          </p>
         </div>
       </footer>
     </>

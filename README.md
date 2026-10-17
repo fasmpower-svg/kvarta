@@ -40,7 +40,7 @@ npx wrangler secret put TELEGRAM_CHAT_ID
 
 ## Lighthouse (mobile)
 
-Performance **85**, Accessibility **100**, Best Practices **100**, SEO **100** (LCP ~3.9 c, TBT ~180 мс, CLS 0). Фото скачаны локально (`public/img`), шрифты self-hosted через `next/font`, hero-картинка с `preload` + `fetchPriority=high`.
+Performance **88**, Accessibility **100**, Best Practices **100**, SEO **100** (LCP ~3.2 c, TBT ~270 мс, CLS 0). Фото скачаны локально (`public/img`), шрифты self-hosted через `next/font`, hero-картинка с `preload` + `fetchPriority=high`.
 
 ## Процесс работы с ИИ
 
