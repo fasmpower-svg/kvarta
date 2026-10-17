@@ -2,6 +2,7 @@
 
 interface Env {
   kvarta_db: D1Database;
+  ASSETS: Fetcher;
 }
 
 const DEDUP_WINDOW_MS = 10 * 60 * 1000;
@@ -36,7 +37,7 @@ function cleanText(raw: unknown, maxLen: number): string {
   return raw.trim().slice(0, maxLen);
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+async function handleLead(request: Request, env: Env): Promise<Response> {
   let payload: Record<string, unknown>;
   try {
     payload = (await request.json()) as Record<string, unknown>;
@@ -118,4 +119,19 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       500,
     );
   }
-};
+}
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const { pathname } = new URL(request.url);
+
+    if (pathname === "/api/lead") {
+      if (request.method !== "POST") {
+        return json({ ok: false, error: "method_not_allowed" }, 405);
+      }
+      return handleLead(request, env);
+    }
+
+    return env.ASSETS.fetch(request);
+  },
+} satisfies ExportedHandler<Env>;

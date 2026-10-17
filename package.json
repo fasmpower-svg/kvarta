@@ -8,10 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "preview": "wrangler pages dev",
+    "preview": "wrangler dev",
     "db:local": "wrangler d1 execute kvarta-db --local --file=./db/schema.sql",
     "db:remote": "wrangler d1 execute kvarta-db --remote --file=./db/schema.sql",
-    "deploy": "wrangler pages deploy"
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "next": "16.4.2",
