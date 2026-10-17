@@ -96,6 +96,16 @@
   .phone-row input{border-radius:0 12px 12px 0}
   .hint{font-size:12.5px;color:var(--muted)}
   button{background:var(--ink);color:#fff;border:0;padding:16px;border-radius:12px;font:inherit;font-weight:700;cursor:pointer}
+  .lbl{font-size:13px;font-weight:700;color:var(--ink);display:block;margin-bottom:8px}
+  .radios{display:grid;gap:10px}
+  .radios label{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--line);
+    border-radius:12px;background:#fff;cursor:pointer;font-size:15px;font-weight:500;color:var(--ink);margin:0}
+  .radios input{appearance:none;-webkit-appearance:none;width:20px;height:20px;padding:0;margin:0;flex:0 0 auto;
+    border:2px solid #c7ccc8;border-radius:50%;background:#fff;display:grid;place-items:center}
+  .radios input:checked{border-color:var(--accent)}
+  .radios input:checked::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .radios label:has(input:checked){border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .add{cursor:pointer}
   .clist .row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);font-size:15px}
   .clist .row span:first-child{color:var(--muted)}
 
@@ -108,7 +118,7 @@
 </style>
 </head>
 <body>
-<div class="switch"><a href="a.html">A</a><a href="b.html">B</a><a class="on" href="c.html">C</a><a href="index.html">⇔</a></div>
+<div class="switch"><a href="a.html">A</a><a href="b.html">B</a><a class="on" href="c.html">C</a><a href="d.html">D</a><a href="index.html">⇔</a></div>
 
 <header>
   <div class="wrap top">
@@ -141,23 +151,22 @@
 
 <section>
   <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">Ассортимент</div>
-      <h2>Зерно этой недели · 250 г</h2>
-    </div>
+      <div class="sec-head">
+        <h2>Зерно этой недели · 250 г</h2>
+      </div>
     <div class="products">
       <div class="p"><div class="thumb">фото зерна</div><h3>Эфиопия Иргачеффе</h3>
         <div class="note">цветочный, бергамот · светлая обжарка</div>
-        <div class="row"><span class="price">32 BYN</span><span class="add">заказать →</span></div></div>
+        <div class="row"><span class="price">32 BYN</span><span class="add" data-order="Эфиопия Иргачеффе, 250 г">заказать →</span></div></div>
       <div class="p"><div class="thumb">фото зерна</div><h3>Колумбия Уила</h3>
         <div class="note">карамель, красное яблоко</div>
-        <div class="row"><span class="price">29 BYN</span><span class="add">заказать →</span></div></div>
+        <div class="row"><span class="price">29 BYN</span><span class="add" data-order="Колумбия Уила, 250 г">заказать →</span></div></div>
       <div class="p"><div class="thumb">фото зерна</div><h3>Бразилия Серрадо</h3>
         <div class="note">орех, шоколад · под эспрессо</div>
-        <div class="row"><span class="price">26 BYN</span><span class="add">заказать →</span></div></div>
+        <div class="row"><span class="price">26 BYN</span><span class="add" data-order="Бразилия Серрадо, 250 г">заказать →</span></div></div>
       <div class="p"><div class="thumb">фото дрипов</div><h3>Дрип-пакеты</h3>
         <div class="note">ассорти · 10 штук</div>
-        <div class="row"><span class="price">18 BYN</span><span class="add">заказать →</span></div></div>
+        <div class="row"><span class="price">18 BYN</span><span class="add" data-order="Дрип-пакеты, ассорти (10 шт)">заказать →</span></div></div>
     </div>
   </div>
 </section>
@@ -201,8 +210,7 @@
   <div class="wrap">
     <div class="contact">
       <div>
-        <div class="eyebrow">Заявка</div>
-        <h2 style="font-size:clamp(28px,4vw,40px);margin:14px 0 12px">Оставьте номер — перезвоним</h2>
+        <h2 style="font-size:clamp(28px,4vw,40px);margin:0 0 12px">Оставьте номер — перезвоним</h2>
         <p style="color:var(--muted)">Оформим разовый заказ или подписку. Работаем в рабочие часы.</p>
         <div class="clist" style="margin-top:24px">
           <div class="row"><span>Телефон</span><span>+375 (29) 000-00-00</span></div>
@@ -217,8 +225,13 @@
           <div class="phone-row"><span class="cc">+375</span><input id="c-phone" type="tel" placeholder="29 123-45-67"></div>
           <div class="hint">Белорусский номер: код оператора 25, 29, 33 или 44.</div>
         </div>
-        <div><label for="c-interest">Что интересует</label>
-          <select id="c-interest"><option>Подписка — 2 пачки в месяц</option><option>Разовый заказ</option><option>У меня вопрос</option></select>
+        <div>
+          <span class="lbl">Что интересует</span>
+          <div class="radios">
+            <label><input type="radio" name="interest" value="subscription" checked><span>Подписка — 2 пачки в месяц</span></label>
+            <label><input type="radio" name="interest" value="one-time"><span>Разовый заказ</span></label>
+            <label><input type="radio" name="interest" value="question"><span>У меня вопрос</span></label>
+          </div>
         </div>
         <div><label for="c-comment">Комментарий</label><textarea id="c-comment" rows="3" placeholder="Необязательно"></textarea></div>
         <button type="submit">Отправить заявку</button>
@@ -233,5 +246,18 @@
     <div>Минск · с 2019 · обжарка партиями по 5 кг</div>
   </div>
 </footer></div>
+<script>
+  document.querySelectorAll('[data-order]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      var order = el.getAttribute('data-order');
+      var radios = document.querySelectorAll('input[name="interest"]');
+      if (radios[1]) radios[1].checked = true;
+      var c = document.getElementById('c-comment');
+      if (c) c.value = 'Разовый заказ: ' + order;
+      var t = document.getElementById('contact');
+      if (t) t.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
 </body>
 </html>

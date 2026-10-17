@@ -13,7 +13,7 @@
   .wrap{max-width:1080px;margin:0 auto;padding:56px 24px}
   h1{font-size:34px;margin:0 0 8px;letter-spacing:-.02em}
   .sub{color:#6b7280;margin:0 0 36px}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
   a.card{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:#fff;
     border:1px solid #e5e5e1;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.05);transition:transform .15s}
   a.card:hover{transform:translateY(-4px)}
@@ -31,7 +31,7 @@
 <body>
 <div class="wrap">
   <h1>Кварта — черновики дизайна</h1>
-  <p class="sub">Три направления. Тыкай и сравнивай; в каждом варианте сверху есть переключатель A / B / C.</p>
+  <p class="sub">Три направления + D. Тыкай и сравнивай; в каждом варианте сверху есть переключатель A / B / C / D.</p>
   <div class="grid">
     <a class="card" href="a.html">
       <div class="preview"><iframe src="a.html" loading="lazy" title="Вариант A"></iframe></div>
@@ -47,6 +47,11 @@
       <div class="preview"><iframe src="c.html" loading="lazy" title="Вариант C"></iframe></div>
       <div class="cap"><div class="tag">Вариант C</div><h2>Минимализм</h2>
         <p>Много белого, один зелёный акцент, чёткая типографика, крупно выделена подписка.</p></div>
+    </a>
+    <a class="card" href="d.html">
+      <div class="preview"><iframe src="d.html" loading="lazy" title="Вариант D"></iframe></div>
+      <div class="cap"><div class="tag">Вариант D</div><h2>C в цветах B</h2>
+        <p>Вёрстка и типографика C, но тёмная палитра B: тёплый шоколад и янтарный акцент.</p></div>
     </a>
   </div>
   <p class="hint">Фото пока заглушки. Иконки/логотип — тоже. Открой файл напрямую: <code>drafts\a.html</code> и т.д.</p>

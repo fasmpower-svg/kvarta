@@ -89,6 +89,15 @@
   .hint{font-size:12px; color:var(--muted)}
   button{background:var(--ink); color:#fff; border:0; padding:14px; border-radius:3px; font:inherit;
     font-weight:600; cursor:pointer}
+  .lbl{font-size:13px;color:var(--muted);display:block;margin-bottom:8px}
+  .radios{display:grid;gap:10px}
+  .radios label{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1px solid #cabca6;
+    border-radius:4px;background:#fffdf9;cursor:pointer;font-size:15px;color:var(--ink);margin:0}
+  .radios input{appearance:none;-webkit-appearance:none;width:19px;height:19px;padding:0;margin:0;flex:0 0 auto;
+    border:2px solid #c2b39c;border-radius:50%;background:#fff;display:grid;place-items:center}
+  .radios input:checked{border-color:var(--accent)}
+  .radios input:checked::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent)}
+  .radios label:has(input:checked){border-color:var(--accent)}
   .console{background:#fffdf9; border:1px solid var(--line); border-radius:6px; padding:26px}
   .console h3{font-size:16px; margin:0 0 14px}
   .console .row{display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:15px}
@@ -106,7 +115,7 @@
 </head>
 <body>
 <div class="switch">
-  <a class="on" href="a.html">A</a><a href="b.html">B</a><a href="c.html">C</a><a href="index.html">⇔</a>
+  <a class="on" href="a.html">A</a><a href="b.html">B</a><a href="c.html">C</a><a href="d.html">D</a><a href="index.html">⇔</a>
 </div>
 
 <div class="wrap">
@@ -250,12 +259,12 @@
           <div class="hint">Белорусский номер: код оператора 25, 29, 33 или 44.</div>
         </div>
         <div>
-          <label for="a-interest">Что интересует</label>
-          <select id="a-interest">
-            <option>Подписка — 2 пачки в месяц</option>
-            <option>Разовый заказ</option>
-            <option>У меня вопрос</option>
-          </select>
+          <span class="lbl">Что интересует</span>
+          <div class="radios">
+            <label><input type="radio" name="interest" value="subscription" checked><span>Подписка — 2 пачки в месяц</span></label>
+            <label><input type="radio" name="interest" value="one-time"><span>Разовый заказ</span></label>
+            <label><input type="radio" name="interest" value="question"><span>У меня вопрос</span></label>
+          </div>
         </div>
         <div>
           <label for="a-comment">Комментарий</label>

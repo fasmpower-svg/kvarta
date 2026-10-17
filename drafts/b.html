@@ -94,6 +94,16 @@
   .hint{font-size:12px;color:#7d6b57}
   button{background:var(--amber);color:#15110e;border:0;padding:15px;border-radius:4px;font:inherit;
     font-family:"Oswald";text-transform:uppercase;letter-spacing:.08em;font-weight:600;cursor:pointer}
+  .lbl{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+  .radios{display:grid;gap:10px}
+  .radios label{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--line);
+    border-radius:8px;background:#120e0b;cursor:pointer;text-transform:none;letter-spacing:normal;
+    font-size:15px;color:var(--ink);margin:0}
+  .radios input{appearance:none;-webkit-appearance:none;width:20px;height:20px;padding:0;margin:0;flex:0 0 auto;
+    border:2px solid #6b5842;border-radius:50%;background:transparent;display:grid;place-items:center}
+  .radios input:checked{border-color:var(--amber)}
+  .radios input:checked::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--amber)}
+  .radios label:has(input:checked){border-color:var(--amber)}
   .clist .row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}
   .clist .row span:first-child{color:var(--muted)}
 
@@ -106,7 +116,7 @@
 </style>
 </head>
 <body>
-<div class="switch"><a href="a.html">A</a><a class="on" href="b.html">B</a><a href="c.html">C</a><a href="index.html">⇔</a></div>
+<div class="switch"><a href="a.html">A</a><a class="on" href="b.html">B</a><a href="c.html">C</a><a href="d.html">D</a><a href="index.html">⇔</a></div>
 
 <div class="wrap">
   <header>
@@ -140,7 +150,7 @@
 <section id="assortment">
   <div class="wrap">
     <div class="sec-head">
-      <div><span class="tag">Ассортимент</span><h2 style="margin-top:14px">Зерно этой недели</h2></div>
+      <div><h2>Зерно этой недели</h2></div>
       <p>Обжарка под фильтр и эспрессо. Каждая пачка 250 г. Молем под ваш способ заваривания.</p>
     </div>
     <div class="grid">
@@ -190,8 +200,7 @@
   <div class="wrap">
     <div class="contact">
       <div>
-        <span class="tag">Заявка</span>
-        <h2 style="font-size:clamp(28px,4vw,42px);margin:14px 0 10px">Перезвоним и оформим</h2>
+        <h2 style="font-size:clamp(28px,4vw,42px);margin:0 0 10px">Перезвоним и оформим</h2>
         <p style="color:var(--muted)">Оставьте номер — подтвердим заказ или подписку. Работаем в рабочие часы.</p>
         <div class="clist" style="margin-top:22px">
           <div class="row"><span>Телефон</span><span>+375 (29) 000-00-00</span></div>
@@ -206,8 +215,13 @@
           <div class="phone-row"><span class="cc">+375</span><input id="b-phone" type="tel" placeholder="29 123-45-67"></div>
           <div class="hint">Белорусский номер: код 25, 29, 33 или 44.</div>
         </div>
-        <div><label for="b-interest">Что интересует</label>
-          <select id="b-interest"><option>Подписка — 2 пачки в месяц</option><option>Разовый заказ</option><option>У меня вопрос</option></select>
+        <div>
+          <span class="lbl">Что интересует</span>
+          <div class="radios">
+            <label><input type="radio" name="interest" value="subscription" checked><span>Подписка — 2 пачки в месяц</span></label>
+            <label><input type="radio" name="interest" value="one-time"><span>Разовый заказ</span></label>
+            <label><input type="radio" name="interest" value="question"><span>У меня вопрос</span></label>
+          </div>
         </div>
         <div><label for="b-comment">Комментарий</label><textarea id="b-comment" rows="3" placeholder="Необязательно"></textarea></div>
         <button type="submit">Отправить заявку</button>
