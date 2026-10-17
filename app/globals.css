@@ -596,4 +596,13 @@ div[id="contact"] {
   .top nav {
     display: none;
   }
+  header.site .top {
+    justify-content: center;
+  }
+  footer.site .top {
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    text-align: center;
+  }
 }
