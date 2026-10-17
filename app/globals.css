@@ -376,7 +376,7 @@ section {
 
 form.lead {
   display: grid;
-  gap: 16px;
+  gap: 14px;
 }
 
 form.lead label,
@@ -454,14 +454,14 @@ form.lead button[type="submit"]:disabled {
 
 .radios {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
-.radios label {
+form.lead .radios label {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 11px 15px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: #120e0b;

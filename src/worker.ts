@@ -3,6 +3,8 @@
 interface Env {
   kvarta_db: D1Database;
   ASSETS: Fetcher;
+  TELEGRAM_BOT_TOKEN?: string;
+  TELEGRAM_CHAT_ID?: string;
 }
 
 const DEDUP_WINDOW_MS = 10 * 60 * 1000;
@@ -37,7 +39,64 @@ function cleanText(raw: unknown, maxLen: number): string {
   return raw.trim().slice(0, maxLen);
 }
 
-async function handleLead(request: Request, env: Env): Promise<Response> {
+function escapeHtml(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+const INTEREST_LABELS: Record<string, string> = {
+  subscription: "Подписка (2 пачки в месяц)",
+  "one-time": "Разовый заказ",
+  question: "Вопрос",
+};
+
+function leadMessage(data: {
+  name: string;
+  phone: string;
+  interest: string;
+  comment: string;
+  utm_source: string;
+  utm_campaign: string;
+  utm_content: string;
+  page_url: string;
+}): string {
+  const lines = [
+    "<b>Новая заявка «Кварта»</b>",
+    `Имя: ${escapeHtml(data.name)}`,
+    `Телефон: ${escapeHtml(data.phone)}`,
+    `Интерес: ${escapeHtml(INTEREST_LABELS[data.interest] ?? data.interest)}`,
+  ];
+  if (data.comment) lines.push(`Комментарий: ${escapeHtml(data.comment)}`);
+  const source = [data.utm_source, data.utm_campaign, data.utm_content].filter(Boolean).join(" / ");
+  lines.push(`Источник: ${source ? escapeHtml(source) : "прямой заход"}`);
+  if (data.page_url) lines.push(`Страница: ${escapeHtml(data.page_url)}`);
+  return lines.join("\n");
+}
+
+async function notifyTelegram(env: Env, text: string): Promise<void> {
+  const token = env.TELEGRAM_BOT_TOKEN;
+  const chatId = env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return;
+
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+      }),
+    });
+    if (!res.ok) {
+      console.error("telegram notify status", res.status, await res.text());
+    }
+  } catch (err) {
+    console.error("telegram notify failed", err);
+  }
+}
+
+async function handleLead(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   let payload: Record<string, unknown>;
   try {
     payload = (await request.json()) as Record<string, unknown>;
@@ -111,6 +170,22 @@ async function handleLead(request: Request, env: Env): Promise<Response> {
       )
       .run();
 
+    ctx.waitUntil(
+      notifyTelegram(
+        env,
+        leadMessage({
+          name,
+          phone,
+          interest,
+          comment,
+          utm_source: cleanText(payload.utm_source, 200),
+          utm_campaign: cleanText(payload.utm_campaign, 200),
+          utm_content: cleanText(payload.utm_content, 200),
+          page_url: cleanText(payload.page_url, 500),
+        }),
+      ),
+    );
+
     return json({ ok: true });
   } catch (err) {
     console.error("lead insert failed", err);
@@ -122,14 +197,14 @@ async function handleLead(request: Request, env: Env): Promise<Response> {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const { pathname } = new URL(request.url);
 
     if (pathname === "/api/lead") {
       if (request.method !== "POST") {
         return json({ ok: false, error: "method_not_allowed" }, 405);
       }
-      return handleLead(request, env);
+      return handleLead(request, env, ctx);
     }
 
     return env.ASSETS.fetch(request);
