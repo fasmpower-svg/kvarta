@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кварта — вариант D-lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&family=Lora:wght@600;700&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=PT+Serif:wght@700&family=Golos+Text:wght@400;500;600;700&family=Cormorant:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15110e; --soft:#1b1510; --ink:#f3e9db; --muted:#a89683; --accent:#e2a44c;
+    --accent-soft:rgba(226,164,76,.16); --line:#3a2d22; --panel:#1f1913;
+    --font-head:"Unbounded",system-ui,sans-serif;
+    --font-body:"Manrope",system-ui,sans-serif;
+  }
+  html.font-2{--font-head:"Lora",serif;--font-body:"Inter",system-ui,sans-serif}
+  html.font-3{--font-head:"Oswald",system-ui,sans-serif;--font-body:"Inter",system-ui,sans-serif}
+  html.font-4{--font-head:"PT Serif",serif;--font-body:"Golos Text",system-ui,sans-serif}
+  html.font-5{--font-head:"Cormorant",serif;--font-body:"Manrope",system-ui,sans-serif}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);
+    font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.08;font-weight:800;font-family:var(--font-head)}
+  a{color:inherit}
+  .word{font-family:var(--font-head);font-weight:700;letter-spacing:-.02em}
+
+  .switch{position:fixed;right:14px;top:14px;z-index:60;display:flex;gap:4px;background:#241c15;
+    border:1px solid var(--line);border-radius:999px;padding:4px}
+  .switch a{font-size:13px;text-decoration:none;padding:5px 12px;border-radius:999px;color:var(--muted)}
+  .switch a.on{background:var(--accent);color:#15110e;font-weight:700}
+
+  header{position:sticky;top:0;z-index:40;background:rgba(21,17,14,.82);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)}
+  .top{display:flex;justify-content:space-between;align-items:center;height:64px}
+  nav a{margin-left:22px;font-size:14.5px;color:var(--muted);text-decoration:none;font-weight:500}
+  nav a:hover{color:var(--ink)}
+
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:72px 0 64px}
+  .hero h1{font-size:clamp(36px,5.4vw,60px);margin:0 0 18px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero p{color:var(--muted);font-size:18px;max-width:46ch;margin:0 0 28px}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#15110e;text-decoration:none;
+    font-weight:800;padding:15px 26px;border-radius:999px;font-size:15px}
+  .btn.link{background:transparent;color:var(--ink);padding:15px 4px}
+  .imgph{background:
+      linear-gradient(135deg,rgba(226,164,76,.14),rgba(226,164,76,0)),
+      repeating-linear-gradient(45deg,#221a14 0 16px,#1d1611 16px 32px);
+    border:1px solid var(--line);border-radius:20px;min-height:420px;display:flex;align-items:center;
+    justify-content:center;color:#8d7a62;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+  .heroimg{width:100%;height:100%;min-height:420px;border:1px solid var(--line);border-radius:20px;
+    object-fit:cover;display:block}
+
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:8px 0 56px}
+  .fact{border-top:2px solid var(--accent);padding-top:16px}
+  .fact .k{font-family:var(--font-head);font-size:26px;color:#fff}
+  .fact .v{color:var(--muted);font-size:14.5px;margin-top:6px}
+
+  section{padding:64px 0}
+  .alt{background:var(--soft)}
+  .sec-head{margin-bottom:34px;max-width:56ch}
+  .sec-head h2{font-size:clamp(28px,4vw,42px)}
+
+  .products{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .p{border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;background:var(--panel)}
+  .p .thumb{height:130px;border-radius:10px;background:repeating-linear-gradient(45deg,#241c15 0 12px,#1d1611 12px 24px);
+    display:flex;align-items:center;justify-content:center;color:#8d7a62;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .p .thumbImg{width:100%;height:130px;border-radius:10px;object-fit:cover;display:block}
+  .p h3{font-size:18px;font-weight:700;color:#fff}
+  .p .note{color:var(--muted);font-size:14px}
+  .p .row{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+  .p .price{font-weight:800;font-size:18px;color:#fff}
+  .p .add{font-size:13px;color:var(--accent);font-weight:700;cursor:pointer}
+
+  .subcard{border:2px solid var(--accent);border-radius:24px;overflow:hidden;display:grid;
+    grid-template-columns:1.1fr .9fr}
+  .subcard .lft{padding:46px}
+  .subcard .rgt{background:var(--accent);color:#1a130c;padding:46px;display:flex;flex-direction:column;justify-content:center}
+  .subcard h2{font-size:clamp(28px,3.6vw,40px);color:#fff}
+  .subcard ul{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:10px}
+  .subcard li{padding-left:26px;position:relative;color:var(--muted)}
+  .subcard li::before{content:"";position:absolute;left:0;top:9px;width:12px;height:12px;border-radius:50%;
+    background:rgba(226,164,76,.18);border:2px solid var(--accent)}
+  .subcard .rgt .price{font-family:var(--font-head);font-size:56px;line-height:1}
+  .subcard .rgt .per{opacity:.8;margin-top:6px;font-size:14px}
+  .subcard .rgt .btn2{margin-top:22px;background:#15110e;color:var(--accent);border-radius:999px;padding:14px;
+    text-align:center;text-decoration:none;font-weight:800}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .panel{border:1px solid var(--line);border-radius:16px;padding:28px;background:var(--panel)}
+  .panel .big{font-weight:800;font-size:18px;margin-top:6px;color:#fff}
+
+  .contact{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start}
+  form{display:grid;gap:16px}
+  label{font-size:13px;font-weight:700;color:var(--ink);display:block;margin-bottom:6px}
+  input,select,textarea{width:100%;padding:14px 15px;border:1px solid var(--line);background:#120e0b;
+    border-radius:12px;font:inherit;color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .phone-row{display:flex}
+  .phone-row .cc{padding:14px;border:1px solid var(--line);border-right:0;border-radius:12px 0 0 12px;
+    background:#0e0b09;color:var(--muted);font-weight:600}
+  .phone-row input{border-radius:0 12px 12px 0}
+  .hint{font-size:12.5px;color:#7d6b57}
+  button{background:var(--accent);color:#15110e;border:0;padding:16px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer}
+  .lbl{font-size:13px;font-weight:700;color:var(--ink);display:block;margin-bottom:8px}
+  .radios{display:grid;gap:10px}
+  .radios label{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--line);
+    border-radius:12px;background:#120e0b;cursor:pointer;font-size:15px;font-weight:500;color:var(--ink);margin:0}
+  .radios input{appearance:none;-webkit-appearance:none;width:20px;height:20px;padding:0;margin:0;flex:0 0 auto;
+    border:2px solid #6b5842;border-radius:50%;background:transparent;display:grid;place-items:center}
+  .radios input:checked{border-color:var(--accent)}
+  .radios input:checked::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .radios label:has(input:checked){border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .clist .row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);font-size:15px}
+  .clist .row span:first-child{color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);padding:36px 0 60px;color:var(--muted);font-size:14px}
+
+  .lab{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:70;display:flex;gap:10px;
+    align-items:center;flex-wrap:wrap;justify-content:center;background:#1f1913;border:1px solid var(--line);
+    border-radius:16px;padding:10px 14px;box-shadow:0 12px 34px rgba(0,0,0,.55);max-width:calc(100% - 20px)}
+  .lab label{font-size:12.5px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px;margin:0}
+  .lab select{width:auto;padding:8px 10px;border:1px solid var(--line);background:#120e0b;color:var(--ink);
+    border-radius:10px;font:inherit;font-size:13px}
+  .lab button{padding:9px 14px;font-size:13px;border-radius:10px}
+
+  @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:48px}.imgph,.heroimg{min-height:300px}
+    .products{grid-template-columns:repeat(2,1fr)}.subcard{grid-template-columns:1fr}
+    .contact,.two{grid-template-columns:1fr}.facts{grid-template-columns:1fr}}
+  @media(max-width:560px){.products{grid-template-columns:1fr}nav{display:none}.switch{right:10px}}
+</style>
+</head>
+<body>
+<div class="switch"><a href="a.html">A</a><a href="b.html">B</a><a href="c.html">C</a><a class="on" href="d-lab.html">D</a><a href="index.html">⇔</a></div>
+
+<header>
+  <div class="wrap top">
+    <div class="word">кварта</div>
+    <nav>
+      <a href="#assortment">Ассортимент</a><a href="#sub">Подписка</a><a href="#delivery">Доставка</a><a href="#contact">Заявка</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <h1>Кофе на <em>1–3 день</em> после обжарки</h1>
+      <p>Небольшая мастерская на Короля, 9. Обжариваем свежую партию каждый четверг
+         и развозим по Минску по пятницам — без склада и лишнего времени в мешке.</p>
+      <a class="btn" href="#contact">Оставить заявку</a>
+    </div>
+    <img id="heroImg" class="heroimg" src="https://images.pexels.com/photos/1695052/pexels-photo-1695052.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Зёрна кофе крупным планом">
+  </div>
+
+  <div class="facts">
+    <div class="fact"><div class="k">20 пачек</div><div class="v">столько выходит из одной обжарки — 5 кг зерна</div></div>
+    <div class="fact"><div class="k">2019</div><div class="v">год, с которого мы обжариваем</div></div>
+    <div class="fact"><div class="k">1–3 дня</div><div class="v">от обжарки до вашей кухни</div></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Зерно этой недели · 250 г</h2>
+    </div>
+    <div class="products">
+      <div class="p"><img class="thumbImg" data-slot="0" src="https://images.pexels.com/photos/1695052/pexels-photo-1695052.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Зёрна крупно"><h3>Эфиопия Иргачеффе</h3>
+        <div class="note">цветочный, бергамот · светлая обжарка</div>
+        <div class="row"><span class="price">32 BYN</span><span class="add" data-order="Эфиопия Иргачеффе, 250 г">заказать →</span></div></div>
+      <div class="p"><img class="thumbImg" data-slot="1" src="https://images.pexels.com/photos/894695/pexels-photo-894695.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Обжарка в барабане"><h3>Колумбия Уила</h3>
+        <div class="note">карамель, красное яблоко</div>
+        <div class="row"><span class="price">29 BYN</span><span class="add" data-order="Колумбия Уила, 250 г">заказать →</span></div></div>
+      <div class="p"><img class="thumbImg" data-slot="2" src="https://images.pexels.com/photos/15672165/pexels-photo-15672165.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Пуровер V60"><h3>Бразилия Серрадо</h3>
+        <div class="note">орех, шоколад · под эспрессо</div>
+        <div class="row"><span class="price">26 BYN</span><span class="add" data-order="Бразилия Серрадо, 250 г">заказать →</span></div></div>
+      <div class="p"><img class="thumbImg" data-slot="3" src="https://images.pexels.com/photos/29261558/pexels-photo-29261558.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Дриппер V60"><h3>Дрип-пакеты</h3>
+        <div class="note">ассорти · 10 штук</div>
+        <div class="row"><span class="price">18 BYN</span><span class="add" data-order="Дрип-пакеты, ассорти (10 шт)">заказать →</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="sub" class="alt">
+  <div class="wrap">
+    <div class="subcard">
+      <div class="lft">
+        <h2>Две пачки раз в месяц</h2>
+        <ul>
+          <li>Состав собираем под ваш вкус</li>
+          <li>Каждый месяц — другое зерно</li>
+          <li>Доставка по Минску бесплатно</li>
+          <li>Пропустить или отменить — в один клик</li>
+        </ul>
+      </div>
+      <div class="rgt">
+        <div class="price">54 BYN</div>
+        <div class="per">в месяц · 2 × 250 г</div>
+        <a class="btn2" href="#contact">Оформить подписку</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="delivery">
+  <div class="wrap">
+    <div class="two">
+      <div class="panel"><h3 style="font-weight:800">Самовывоз</h3>
+        <p style="color:var(--muted);margin:8px 0 0">Минск, ул. Короля, 9</p>
+        <div class="big">Пн–пт 8:00–20:00<br>Сб–вс 10:00–18:00</div></div>
+      <div class="panel"><h3 style="font-weight:800">Доставка по Минску</h3>
+        <p style="color:var(--muted);margin:8px 0 0">Развозим по пятницам</p>
+        <div class="big">От 50 BYN — бесплатно, ниже — 5 BYN</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="alt">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <h2 style="font-size:clamp(28px,4vw,40px);margin:0 0 12px">Оставьте номер — перезвоним</h2>
+        <p style="color:var(--muted)">Оформим разовый заказ или подписку. Работаем в рабочие часы.</p>
+        <div class="clist" style="margin-top:24px">
+          <div class="row"><span>Телефон</span><span>+375 (29) 000-00-00</span></div>
+          <div class="row"><span>Адрес</span><span>ул. Короля, 9</span></div>
+          <div class="row"><span>Instagram</span><span>@kvarta.coffee</span></div>
+        </div>
+      </div>
+      <form onsubmit="return false">
+        <div><label for="d-name">Имя</label><input id="d-name" type="text" placeholder="Как к вам обращаться"></div>
+        <div>
+          <label for="d-phone">Телефон</label>
+          <div class="phone-row"><span class="cc">+375</span><input id="d-phone" type="tel" placeholder="29 123-45-67"></div>
+          <div class="hint">Белорусский номер: код оператора 25, 29, 33 или 44.</div>
+        </div>
+        <div>
+          <span class="lbl">Что интересует</span>
+          <div class="radios">
+            <label><input type="radio" name="interest" value="subscription" checked><span>Подписка — 2 пачки в месяц</span></label>
+            <label><input type="radio" name="interest" value="one-time"><span>Разовый заказ</span></label>
+            <label><input type="radio" name="interest" value="question"><span>У меня вопрос</span></label>
+          </div>
+        </div>
+        <div><label for="d-comment">Комментарий</label><textarea id="d-comment" rows="3" placeholder="Необязательно"></textarea></div>
+        <button type="submit">Отправить заявку</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><footer>
+  <div class="top" style="height:auto">
+    <div class="word" style="font-size:16px">кварта</div>
+    <div>Минск · с 2019 · обжариваем по четвергам</div>
+  </div>
+</footer></div>
+
+<div class="lab">
+  <label>Главное фото <select id="heroPick"></select></label>
+  <button type="button" id="shuffle">Перемешать товары</button>
+  <label>Шрифты <select id="fontPick">
+    <option value="font-1">1 · Unbounded + Manrope</option>
+    <option value="font-2">2 · Lora + Inter</option>
+    <option value="font-3">3 · Oswald + Inter</option>
+    <option value="font-4">4 · PT Serif + Golos Text</option>
+    <option value="font-5">5 · Cormorant + Manrope</option>
+  </select></label>
+</div>
+
+<script>
+  var IMAGES = [
+    {label:"Обжарка в барабане", url:"https://images.pexels.com/photos/894695/pexels-photo-894695.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Зёрна крупно",       url:"https://images.pexels.com/photos/1695052/pexels-photo-1695052.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Пуровер V60",        url:"https://images.pexels.com/photos/15672165/pexels-photo-15672165.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Дриппер V60",        url:"https://images.pexels.com/photos/29261558/pexels-photo-29261558.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Эспрессо",           url:"https://images.pexels.com/photos/1233528/pexels-photo-1233528.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Латте-арт",          url:"https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Розлив молока",      url:"https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Чашка в руках",      url:"https://images.pexels.com/photos/373639/pexels-photo-373639.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Кофейня",            url:"https://images.pexels.com/photos/2074130/pexels-photo-2074130.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Кофемолка",          url:"https://images.pexels.com/photos/1447931/pexels-photo-1447931.jpeg?auto=compress&cs=tinysrgb&w=1600"},
+    {label:"Чашка кофе",         url:"https://images.pexels.com/photos/1207918/pexels-photo-1207918.jpeg?auto=compress&cs=tinysrgb&w=1600"}
+  ];
+
+  var heroImg = document.getElementById("heroImg");
+  var heroPick = document.getElementById("heroPick");
+  var thumbImgs = document.querySelectorAll(".thumbImg");
+
+  IMAGES.forEach(function (img, i) {
+    var o = document.createElement("option");
+    o.value = i;
+    o.textContent = img.label;
+    heroPick.appendChild(o);
+  });
+  heroPick.value = "1";
+  heroPick.addEventListener("change", function () {
+    var img = IMAGES[Number(heroPick.value)];
+    if (img) { heroImg.src = img.url; heroImg.alt = img.label; }
+  });
+
+  document.getElementById("shuffle").addEventListener("click", function () {
+    var pool = IMAGES.slice();
+    for (var i = pool.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+    }
+    thumbImgs.forEach(function (el, i) {
+      var img = pool[i % pool.length];
+      el.src = img.url;
+      el.alt = img.label;
+    });
+  });
+
+  var fontPick = document.getElementById("fontPick");
+  document.documentElement.className = "font-1";
+  fontPick.addEventListener("change", function () {
+    document.documentElement.className = fontPick.value;
+  });
+
+  document.querySelectorAll('[data-order]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      var order = el.getAttribute('data-order');
+      var radios = document.querySelectorAll('input[name="interest"]');
+      if (radios[1]) radios[1].checked = true;
+      var c = document.getElementById('d-comment');
+      if (c) c.value = 'Разовый заказ: ' + order;
+      var t = document.getElementById('contact');
+      if (t) t.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
