@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кварта — вариант C (минимализм)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --soft:#f6f6f3; --ink:#0f1210; --muted:#6b7280; --accent:#1f5b45;
+    --accent-soft:#e9f1ec; --line:#e7e7e3;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;
+    font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.08;font-weight:800}
+  a{color:inherit}
+  .word{font-family:"Unbounded";font-weight:700;letter-spacing:-.02em}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+
+  .switch{position:fixed;right:14px;top:14px;z-index:60;display:flex;gap:4px;background:#fff;
+    border:1px solid var(--line);border-radius:999px;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+  .switch a{font-size:13px;text-decoration:none;padding:5px 12px;border-radius:999px;color:var(--muted)}
+  .switch a.on{background:var(--accent);color:#fff}
+
+  header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)}
+  .top{display:flex;justify-content:space-between;align-items:center;height:64px}
+  nav a{margin-left:22px;font-size:14.5px;color:var(--muted);text-decoration:none;font-weight:500}
+  nav a:hover{color:var(--ink)}
+
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:72px 0 64px}
+  .hero h1{font-size:clamp(36px,5.4vw,60px);margin:16px 0 18px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero p{color:var(--muted);font-size:18px;max-width:46ch;margin:0 0 28px}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;text-decoration:none;
+    font-weight:700;padding:15px 26px;border-radius:999px;font-size:15px}
+  .btn.link{background:transparent;color:var(--ink);padding:15px 4px}
+  .imgph{background:
+      linear-gradient(135deg,rgba(31,91,69,.10),rgba(31,91,69,0)),
+      repeating-linear-gradient(45deg,#f0f0ec 0 16px,#ecece8 16px 32px);
+    border:1px solid var(--line);border-radius:20px;min-height:420px;display:flex;align-items:center;
+    justify-content:center;color:#8a8f8b;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:8px 0 56px}
+  .fact{border-top:2px solid var(--ink);padding-top:16px}
+  .fact .k{font-family:"Unbounded";font-size:26px}
+  .fact .v{color:var(--muted);font-size:14.5px;margin-top:6px}
+
+  section{padding:64px 0}
+  .alt{background:var(--soft)}
+  .sec-head{margin-bottom:34px;max-width:56ch}
+  .sec-head h2{font-size:clamp(28px,4vw,42px);margin-top:14px}
+
+  .products{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .p{border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;background:#fff}
+  .p .thumb{height:130px;border-radius:10px;background:repeating-linear-gradient(45deg,#f2f2ee 0 12px,#ecece8 12px 24px);
+    display:flex;align-items:center;justify-content:center;color:#9aa09b;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .p h3{font-size:18px;font-weight:700}
+  .p .note{color:var(--muted);font-size:14px}
+  .p .row{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+  .p .price{font-weight:800;font-size:18px}
+  .p .add{font-size:13px;color:var(--accent);font-weight:700}
+
+  .subcard{border:2px solid var(--accent);border-radius:24px;overflow:hidden;display:grid;
+    grid-template-columns:1.1fr .9fr}
+  .subcard .lft{padding:46px}
+  .subcard .rgt{background:var(--accent);color:#fff;padding:46px;display:flex;flex-direction:column;justify-content:center}
+  .subcard h2{font-size:clamp(28px,3.6vw,40px)}
+  .subcard ul{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:10px}
+  .subcard li{padding-left:26px;position:relative;color:var(--muted)}
+  .subcard li::before{content:"";position:absolute;left:0;top:9px;width:12px;height:12px;border-radius:50%;
+    background:var(--accent-soft);border:2px solid var(--accent)}
+  .subcard .rgt .price{font-family:"Unbounded";font-size:56px;line-height:1}
+  .subcard .rgt .per{opacity:.85;margin-top:6px;font-size:14px}
+  .subcard .rgt .btn2{margin-top:22px;background:#fff;color:var(--accent);border-radius:999px;padding:14px;
+    text-align:center;text-decoration:none;font-weight:800}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .panel{border:1px solid var(--line);border-radius:16px;padding:28px;background:#fff}
+  .panel .big{font-weight:800;font-size:18px;margin-top:6px}
+
+  .contact{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start}
+  form{display:grid;gap:16px}
+  label{font-size:13px;font-weight:700;color:var(--ink);display:block;margin-bottom:6px}
+  input,select,textarea{width:100%;padding:14px 15px;border:1px solid var(--line);background:#fff;
+    border-radius:12px;font:inherit;color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .phone-row{display:flex}
+  .phone-row .cc{padding:14px 14px;border:1px solid var(--line);border-right:0;border-radius:12px 0 0 12px;
+    background:var(--soft);color:var(--muted);font-weight:600}
+  .phone-row input{border-radius:0 12px 12px 0}
+  .hint{font-size:12.5px;color:var(--muted)}
+  button{background:var(--ink);color:#fff;border:0;padding:16px;border-radius:12px;font:inherit;font-weight:700;cursor:pointer}
+  .clist .row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);font-size:15px}
+  .clist .row span:first-child{color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);padding:36px 0 60px;color:var(--muted);font-size:14px}
+
+  @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:48px}.imgph{min-height:300px}
+    .products{grid-template-columns:repeat(2,1fr)}.subcard{grid-template-columns:1fr}
+    .contact,.two{grid-template-columns:1fr}.facts{grid-template-columns:1fr}}
+  @media(max-width:560px){.products{grid-template-columns:1fr}nav{display:none}.switch{right:10px}}
+</style>
+</head>
+<body>
+<div class="switch"><a href="a.html">A</a><a href="b.html">B</a><a class="on" href="c.html">C</a><a href="index.html">⇔</a></div>
+
+<header>
+  <div class="wrap top">
+    <div class="word">кварта</div>
+    <nav>
+      <a href="#assortment">Ассортимент</a><a href="#sub">Подписка</a><a href="#delivery">Доставка</a><a href="#contact">Заявка</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Обжарка кофе · Минск</div>
+      <h1>Кофе на <em>1–3 день</em> после обжарки</h1>
+      <p>Небольшая мастерская на Короля, 9. Обжариваем партиями по 5 кг по четвергам
+         и развозим по пятницам — без склада и лишнего времени в мешке.</p>
+      <a class="btn" href="#contact">Оставить заявку</a>
+      <a class="btn link" href="#assortment">Зерно этой недели →</a>
+    </div>
+    <div class="imgph">фото: чашка кофе / зерно крупным планом</div>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><div class="k">5 кг</div><div class="v">размер одной партии обжарки</div></div>
+    <div class="fact"><div class="k">2019</div><div class="v">год, с которого мы обжариваем</div></div>
+    <div class="fact"><div class="k">1–3 дня</div><div class="v">от обжарки до вашей кухни</div></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Ассортимент</div>
+      <h2>Зерно этой недели · 250 г</h2>
+    </div>
+    <div class="products">
+      <div class="p"><div class="thumb">фото зерна</div><h3>Эфиопия Иргачеффе</h3>
+        <div class="note">цветочный, бергамот · светлая обжарка</div>
+        <div class="row"><span class="price">32 BYN</span><span class="add">заказать →</span></div></div>
+      <div class="p"><div class="thumb">фото зерна</div><h3>Колумбия Уила</h3>
+        <div class="note">карамель, красное яблоко</div>
+        <div class="row"><span class="price">29 BYN</span><span class="add">заказать →</span></div></div>
+      <div class="p"><div class="thumb">фото зерна</div><h3>Бразилия Серрадо</h3>
+        <div class="note">орех, шоколад · под эспрессо</div>
+        <div class="row"><span class="price">26 BYN</span><span class="add">заказать →</span></div></div>
+      <div class="p"><div class="thumb">фото дрипов</div><h3>Дрип-пакеты</h3>
+        <div class="note">ассорти · 10 штук</div>
+        <div class="row"><span class="price">18 BYN</span><span class="add">заказать →</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="sub" class="alt">
+  <div class="wrap">
+    <div class="subcard">
+      <div class="lft">
+        <div class="eyebrow">Подписка</div>
+        <h2 style="margin-top:14px">Две пачки раз в месяц</h2>
+        <ul>
+          <li>Состав собираем под ваш вкус</li>
+          <li>Каждый месяц — другое зерно</li>
+          <li>Доставка по Минску бесплатно</li>
+          <li>Пропустить или отменить — в один клик</li>
+        </ul>
+      </div>
+      <div class="rgt">
+        <div class="price">54 BYN</div>
+        <div class="per">в месяц · 2 × 250 г</div>
+        <a class="btn2" href="#contact">Оформить подписку</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="delivery">
+  <div class="wrap">
+    <div class="two">
+      <div class="panel"><h3 style="font-weight:800">Самовывоз</h3>
+        <p style="color:var(--muted);margin:8px 0 0">Минск, ул. Короля, 9</p>
+        <div class="big">Пн–пт 8:00–20:00<br>Сб–вс 10:00–18:00</div></div>
+      <div class="panel"><h3 style="font-weight:800">Доставка по Минску</h3>
+        <p style="color:var(--muted);margin:8px 0 0">Развозим по пятницам</p>
+        <div class="big">От 50 BYN — бесплатно, ниже — 5 BYN</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="alt">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <div class="eyebrow">Заявка</div>
+        <h2 style="font-size:clamp(28px,4vw,40px);margin:14px 0 12px">Оставьте номер — перезвоним</h2>
+        <p style="color:var(--muted)">Оформим разовый заказ или подписку. Работаем в рабочие часы.</p>
+        <div class="clist" style="margin-top:24px">
+          <div class="row"><span>Телефон</span><span>+375 (29) 000-00-00</span></div>
+          <div class="row"><span>Адрес</span><span>ул. Короля, 9</span></div>
+          <div class="row"><span>Instagram</span><span>@kvarta.coffee</span></div>
+        </div>
+      </div>
+      <form onsubmit="return false">
+        <div><label for="c-name">Имя</label><input id="c-name" type="text" placeholder="Как к вам обращаться"></div>
+        <div>
+          <label for="c-phone">Телефон</label>
+          <div class="phone-row"><span class="cc">+375</span><input id="c-phone" type="tel" placeholder="29 123-45-67"></div>
+          <div class="hint">Белорусский номер: код оператора 25, 29, 33 или 44.</div>
+        </div>
+        <div><label for="c-interest">Что интересует</label>
+          <select id="c-interest"><option>Подписка — 2 пачки в месяц</option><option>Разовый заказ</option><option>У меня вопрос</option></select>
+        </div>
+        <div><label for="c-comment">Комментарий</label><textarea id="c-comment" rows="3" placeholder="Необязательно"></textarea></div>
+        <button type="submit">Отправить заявку</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><footer>
+  <div class="top" style="height:auto">
+    <div class="word" style="font-size:16px">кварта</div>
+    <div>Минск · с 2019 · обжарка партиями по 5 кг</div>
+  </div>
+</footer></div>
+</body>
+</html>
