@@ -3,23 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Кварта — вариант D (C в цветах B)</title>
+<title>Кварта — вариант D (финальный референс)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#15110e; --soft:#1b1510; --ink:#f3e9db; --muted:#a89683; --accent:#e2a44c;
     --accent-soft:rgba(226,164,76,.16); --line:#3a2d22; --panel:#1f1913;
+    --font-head:"PT Serif",Georgia,serif; --font-body:"Golos Text",system-ui,sans-serif;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);
     font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
   .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-  h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.08;font-weight:800}
+  h1,h2,h3{margin:0;letter-spacing:-.01em;line-height:1.12;font-weight:700;font-family:var(--font-head)}
   a{color:inherit}
-  .word{font-family:"Unbounded";font-weight:700;letter-spacing:-.02em}
+  .word{font-family:var(--font-head);font-weight:700;letter-spacing:.01em}
 
   .switch{position:fixed;right:14px;top:14px;z-index:60;display:flex;gap:4px;background:#241c15;
     border:1px solid var(--line);border-radius:999px;padding:4px}
@@ -32,22 +33,17 @@
   nav a{margin-left:22px;font-size:14.5px;color:var(--muted);text-decoration:none;font-weight:500}
   nav a:hover{color:var(--ink)}
 
-  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:72px 0 64px}
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:stretch;padding:72px 0 64px}
   .hero h1{font-size:clamp(36px,5.4vw,60px);margin:0 0 18px}
   .hero h1 em{font-style:normal;color:var(--accent)}
   .hero p{color:var(--muted);font-size:18px;max-width:46ch;margin:0 0 28px}
   .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#15110e;text-decoration:none;
-    font-weight:800;padding:15px 26px;border-radius:999px;font-size:15px}
-  .btn.link{background:transparent;color:var(--ink);padding:15px 4px}
-  .imgph{background:
-      linear-gradient(135deg,rgba(226,164,76,.14),rgba(226,164,76,0)),
-      repeating-linear-gradient(45deg,#221a14 0 16px,#1d1611 16px 32px);
-    border:1px solid var(--line);border-radius:20px;min-height:420px;display:flex;align-items:center;
-    justify-content:center;color:#8d7a62;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+    font-weight:700;padding:15px 26px;border-radius:999px;font-size:15px}
+  .heroimg{width:100%;height:100%;object-fit:cover;border-radius:20px;display:block}
 
   .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:8px 0 56px}
   .fact{border-top:2px solid var(--accent);padding-top:16px}
-  .fact .k{font-family:"Unbounded";font-size:26px;color:#fff}
+  .fact .k{font-family:var(--font-head);font-size:26px;color:#fff}
   .fact .v{color:var(--muted);font-size:14.5px;margin-top:6px}
 
   section{padding:64px 0}
@@ -57,12 +53,11 @@
 
   .products{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
   .p{border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;background:var(--panel)}
-  .p .thumb{height:130px;border-radius:10px;background:repeating-linear-gradient(45deg,#241c15 0 12px,#1d1611 12px 24px);
-    display:flex;align-items:center;justify-content:center;color:#8d7a62;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+  .thumbImg{height:150px;width:100%;object-fit:cover;border-radius:10px;display:block}
   .p h3{font-size:18px;font-weight:700;color:#fff}
   .p .note{color:var(--muted);font-size:14px}
   .p .row{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
-  .p .price{font-weight:800;font-size:18px;color:#fff}
+  .p .price{font-weight:700;font-size:18px;color:#fff}
   .p .add{font-size:13px;color:var(--accent);font-weight:700;cursor:pointer}
 
   .subcard{border:2px solid var(--accent);border-radius:24px;overflow:hidden;display:grid;
@@ -74,14 +69,14 @@
   .subcard li{padding-left:26px;position:relative;color:var(--muted)}
   .subcard li::before{content:"";position:absolute;left:0;top:9px;width:12px;height:12px;border-radius:50%;
     background:rgba(226,164,76,.18);border:2px solid var(--accent)}
-  .subcard .rgt .price{font-family:"Unbounded";font-size:56px;line-height:1}
+  .subcard .rgt .price{font-family:var(--font-head);font-size:56px;line-height:1}
   .subcard .rgt .per{opacity:.8;margin-top:6px;font-size:14px}
   .subcard .rgt .btn2{margin-top:22px;background:#15110e;color:var(--accent);border-radius:999px;padding:14px;
-    text-align:center;text-decoration:none;font-weight:800}
+    text-align:center;text-decoration:none;font-weight:700}
 
   .two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
   .panel{border:1px solid var(--line);border-radius:16px;padding:28px;background:var(--panel)}
-  .panel .big{font-weight:800;font-size:18px;margin-top:6px;color:#fff}
+  .panel .big{font-weight:700;font-size:18px;margin-top:6px;color:#fff}
 
   .contact{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start}
   form{display:grid;gap:16px}
@@ -94,7 +89,7 @@
     background:#0e0b09;color:var(--muted);font-weight:600}
   .phone-row input{border-radius:0 12px 12px 0}
   .hint{font-size:12.5px;color:#7d6b57}
-  button{background:var(--accent);color:#15110e;border:0;padding:16px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer}
+  button{background:var(--accent);color:#15110e;border:0;padding:16px;border-radius:12px;font:inherit;font-weight:700;cursor:pointer}
   .lbl{font-size:13px;font-weight:700;color:var(--ink);display:block;margin-bottom:8px}
   .radios{display:grid;gap:10px}
   .radios label{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--line);
@@ -109,7 +104,8 @@
 
   footer{border-top:1px solid var(--line);padding:36px 0 60px;color:var(--muted);font-size:14px}
 
-  @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:48px}.imgph{min-height:300px}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:48px}
+    .heroimg{height:auto;aspect-ratio:4/3}
     .products{grid-template-columns:repeat(2,1fr)}.subcard{grid-template-columns:1fr}
     .contact,.two{grid-template-columns:1fr}.facts{grid-template-columns:1fr}}
   @media(max-width:560px){.products{grid-template-columns:1fr}nav{display:none}.switch{right:10px}}
@@ -120,7 +116,7 @@
 
 <header>
   <div class="wrap top">
-    <div class="word">кварта</div>
+    <div class="word">Кварта</div>
     <nav>
       <a href="#assortment">Ассортимент</a><a href="#sub">Подписка</a><a href="#delivery">Доставка</a><a href="#contact">Заявка</a>
     </nav>
@@ -135,7 +131,7 @@
          и развозим по Минску по пятницам — без склада и лишнего времени в мешке.</p>
       <a class="btn" href="#contact">Оставить заявку</a>
     </div>
-    <div class="imgph">фото: чашка кофе / зерно крупным планом</div>
+    <img class="heroimg" src="https://images.pexels.com/photos/894695/pexels-photo-894695.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Обжарка зерна в барабане">
   </div>
 
   <div class="facts">
@@ -145,24 +141,36 @@
   </div>
 </div>
 
-<section>
+<section id="assortment">
   <div class="wrap">
     <div class="sec-head">
       <h2>Зерно этой недели · 250 г</h2>
     </div>
     <div class="products">
-      <div class="p"><div class="thumb">фото зерна</div><h3>Эфиопия Иргачеффе</h3>
+      <div class="p">
+        <img class="thumbImg" src="https://images.pexels.com/photos/15672165/pexels-photo-15672165.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Пуровер V60">
+        <h3>Эфиопия Иргачеффе</h3>
         <div class="note">цветочный, бергамот · светлая обжарка</div>
-        <div class="row"><span class="price">32 BYN</span><span class="add" data-order="Эфиопия Иргачеффе, 250 г">заказать →</span></div></div>
-      <div class="p"><div class="thumb">фото зерна</div><h3>Колумбия Уила</h3>
+        <div class="row"><span class="price">32 BYN</span><span class="add" data-interest="one-time" data-order="Эфиопия Иргачеффе, 250 г">заказать →</span></div>
+      </div>
+      <div class="p">
+        <img class="thumbImg" src="https://images.pexels.com/photos/1695052/pexels-photo-1695052.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Зёрна крупно">
+        <h3>Колумбия Уила</h3>
         <div class="note">карамель, красное яблоко</div>
-        <div class="row"><span class="price">29 BYN</span><span class="add" data-order="Колумбия Уила, 250 г">заказать →</span></div></div>
-      <div class="p"><div class="thumb">фото зерна</div><h3>Бразилия Серрадо</h3>
+        <div class="row"><span class="price">29 BYN</span><span class="add" data-interest="one-time" data-order="Колумбия Уила, 250 г">заказать →</span></div>
+      </div>
+      <div class="p">
+        <img class="thumbImg" src="https://images.pexels.com/photos/1233528/pexels-photo-1233528.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Эспрессо">
+        <h3>Бразилия Серрадо</h3>
         <div class="note">орех, шоколад · под эспрессо</div>
-        <div class="row"><span class="price">26 BYN</span><span class="add" data-order="Бразилия Серрадо, 250 г">заказать →</span></div></div>
-      <div class="p"><div class="thumb">фото дрипов</div><h3>Дрип-пакеты</h3>
+        <div class="row"><span class="price">26 BYN</span><span class="add" data-interest="one-time" data-order="Бразилия Серрадо, 250 г">заказать →</span></div>
+      </div>
+      <div class="p">
+        <img class="thumbImg" src="https://images.pexels.com/photos/29261558/pexels-photo-29261558.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Дриппер V60">
+        <h3>Дрип-пакеты</h3>
         <div class="note">ассорти · 10 штук</div>
-        <div class="row"><span class="price">18 BYN</span><span class="add" data-order="Дрип-пакеты, ассорти (10 шт)">заказать →</span></div></div>
+        <div class="row"><span class="price">18 BYN</span><span class="add" data-interest="one-time" data-order="Дрип-пакеты, ассорти (10 шт)">заказать →</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -182,7 +190,7 @@
       <div class="rgt">
         <div class="price">54 BYN</div>
         <div class="per">в месяц · 2 × 250 г</div>
-        <a class="btn2" href="#contact">Оформить подписку</a>
+        <a class="btn2" href="#contact" data-interest="subscription">Оформить подписку</a>
       </div>
     </div>
   </div>
@@ -191,10 +199,10 @@
 <section id="delivery">
   <div class="wrap">
     <div class="two">
-      <div class="panel"><h3 style="font-weight:800">Самовывоз</h3>
+      <div class="panel"><h3>Самовывоз</h3>
         <p style="color:var(--muted);margin:8px 0 0">Минск, ул. Короля, 9</p>
         <div class="big">Пн–пт 8:00–20:00<br>Сб–вс 10:00–18:00</div></div>
-      <div class="panel"><h3 style="font-weight:800">Доставка по Минску</h3>
+      <div class="panel"><h3>Доставка по Минску</h3>
         <p style="color:var(--muted);margin:8px 0 0">Развозим по пятницам</p>
         <div class="big">От 50 BYN — бесплатно, ниже — 5 BYN</div></div>
     </div>
@@ -237,22 +245,46 @@
 
 <div class="wrap"><footer>
   <div class="top" style="height:auto">
-    <div class="word" style="font-size:16px">кварта</div>
+    <div class="word" style="font-size:16px">Кварта</div>
     <div>Минск · с 2019 · обжариваем по четвергам</div>
   </div>
 </footer></div>
 <script>
-  document.querySelectorAll('[data-order]').forEach(function (el) {
+  var commentEl = document.getElementById('d-comment');
+  var autoComment = true;
+  var lastProduct = '';
+
+  function setInterest(value){
+    var r = document.querySelector('input[name="interest"][value="' + value + '"]');
+    if (r) r.checked = true;
+  }
+  function buildComment(value){
+    if (value === 'subscription') return 'Подписка — 2 пачки в месяц';
+    if (value === 'one-time') return lastProduct ? ('Разовый заказ: ' + lastProduct) : 'Разовый заказ';
+    return '';
+  }
+  function applyInterest(value){
+    setInterest(value);
+    if (autoComment && commentEl) commentEl.value = buildComment(value);
+  }
+
+  document.querySelectorAll('[data-interest]').forEach(function (el) {
     el.addEventListener('click', function () {
-      var order = el.getAttribute('data-order');
-      var radios = document.querySelectorAll('input[name="interest"]');
-      if (radios[1]) radios[1].checked = true;
-      var c = document.getElementById('d-comment');
-      if (c) c.value = 'Разовый заказ: ' + order;
+      var value = el.getAttribute('data-interest');
+      if (value === 'one-time' && el.getAttribute('data-order')) lastProduct = el.getAttribute('data-order');
+      applyInterest(value);
       var t = document.getElementById('contact');
       if (t) t.scrollIntoView({ behavior: 'smooth' });
     });
   });
+
+  document.querySelectorAll('input[name="interest"]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      if (autoComment && commentEl) commentEl.value = buildComment(r.value);
+    });
+  });
+
+  if (commentEl) commentEl.addEventListener('input', function () { autoComment = false; });
 </script>
 </body>
 </html>
