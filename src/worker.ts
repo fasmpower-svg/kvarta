@@ -134,23 +134,18 @@ async function handleLead(request: Request, env: Env, ctx: ExecutionContext): Pr
   }
 
   const now = Date.now();
+  const dedupCutoff = now - DEDUP_WINDOW_MS;
 
   try {
-    const last = await env.kvarta_db
-      .prepare("SELECT created_at_ms FROM leads WHERE phone = ?1 ORDER BY created_at_ms DESC LIMIT 1")
-      .bind(phone)
-      .first<{ created_at_ms: number }>();
-
-    if (last && now - last.created_at_ms < DEDUP_WINDOW_MS) {
-      return json({ ok: true, duplicate: true });
-    }
-
-    await env.kvarta_db
+    const result = await env.kvarta_db
       .prepare(
         `INSERT INTO leads
           (name, phone, interest, comment, utm_source, utm_medium, utm_campaign,
            utm_content, utm_term, click_id, referrer, page_url, user_agent, created_at_ms)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)`,
+         SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14
+         WHERE NOT EXISTS (
+           SELECT 1 FROM leads WHERE phone = ?2 AND created_at_ms > ?15
+         )`,
       )
       .bind(
         name,
@@ -167,8 +162,13 @@ async function handleLead(request: Request, env: Env, ctx: ExecutionContext): Pr
         cleanText(payload.page_url, 500) || null,
         cleanText(request.headers.get("user-agent") ?? "", 500) || null,
         now,
+        dedupCutoff,
       )
       .run();
+
+    if (!result.meta || result.meta.changes === 0) {
+      return json({ ok: true, duplicate: true });
+    }
 
     ctx.waitUntil(
       notifyTelegram(
